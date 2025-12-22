@@ -20,4 +20,7 @@ A robust, terminal-based CLI tool designed for error-free mathematical computati
 * **Kinematics Engine:** Physics simulations for 1D motion.
 * **NumPy Integration:** High-performance vector operations for large datasets.
 
-Author : TMMlangeni
+---
+## 👤 Author
+**Talani Malwandla Mlangeni**
+*Student at North West University*
