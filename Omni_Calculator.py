@@ -96,7 +96,6 @@ def interactive_mode():
             print("Invalid entry. Please enter a number from the menu.")
 
 # --- Logic Functions (Pure Functions for easy Testing) ---
-
 def quadratic_eq(a, b, c):
     """Calculates roots for quadratic equations. Returns a formatted string."""
     delta = b**2 - 4 * a * c
