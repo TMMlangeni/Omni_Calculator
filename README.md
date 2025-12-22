@@ -4,7 +4,7 @@ Welcome to my central repository for Python development. This collection demonst
 
 ## Featured Projects
 
-### 1. The Omni-Calculator (v1.2)
+### 1. The Omni-Calculator 
 A robust, terminal-based CLI tool designed for error-free mathematical computation.
 * **Core Functions:** Quadratic Equation Solver ($R^2$), Conditional Probability ($P(A|B)$), and Descriptive Statistics (Mean).
 * **Key Features:**
