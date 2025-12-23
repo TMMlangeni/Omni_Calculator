@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 def main():
-    """Checks if user provided command line arguments or wants the menu."""
+    #Checks if user provided command line arguments or wants the menu.
     if len(sys.argv) > 1:
         cli_mode()
     else:
@@ -14,7 +14,7 @@ def main():
 
 
 def cli_mode():
-    """Handles quick calculations directly from the terminal."""
+    #Handles quick calculations directly from the terminal.
     command = sys.argv[1].lower()
     try:
         # Convert all arguments after the command into a list of floats
@@ -25,12 +25,12 @@ def cli_mode():
             return
 
         if command == "-mean":
-            print(f"mean: {statistics.mean(numbers):.2f}")
+            print(f"mean: {calculate_mean(numbers):.2f}")
         elif command == "-median":
-            print(f"Median: {statistics.median(numbers):.2f}")
+            print(f"Median: {calculate_median(numbers):.2f}")
         elif command == "-mode":
             try:
-                print(f"Mode: {statistics.mode(numbers)}")
+                print(f"Mode: {calculate_mode(numbers)}")
             except statistics.StatisticsError:
                 print("No unique Mode found")
         else:
