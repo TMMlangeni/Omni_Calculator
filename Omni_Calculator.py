@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 def main():
-    #Checks if user provided command line arguments or wants the menu.
+    # Checks if user provided command line arguments or wants the menu.
     if len(sys.argv) > 1:
         cli_mode()
     else:
@@ -14,7 +14,7 @@ def main():
 
 
 def cli_mode():
-    #Handles quick calculations directly from the terminal.
+    # Handles quick calculations directly from the terminal.
     command = sys.argv[1].lower()
     try:
         # Convert all arguments after the command into a list of floats
@@ -40,7 +40,7 @@ def cli_mode():
 
 
 def interactive_mode():
-    """The main menu for the user interface."""
+    # The main menu for the user interface.
     menu_options = {
         1: "Solve Quadratic Equation (ax^2 + bx + c = 0)",
         2: "Calculate conditional probability",
@@ -100,19 +100,19 @@ def interactive_mode():
                             op = "Descriptive Statistics: Mean"
                             inpt, result = interactive_mean()
                             print(f"The mean = {result:.2f}")
-                            calculation_hist(time,op,inpt,round(result),2)
+                            calculation_hist(time, op, inpt, round(result), 2)
                             break
                         elif value == 2:
                             op = "Descriptive Statistics: Median"
                             inpt, result = interactive_median()
                             print(f"The Median = {result:.2f}")
-                            calculation_hist(time,op,inpt,result)
+                            calculation_hist(time, op, inpt, result)
                             break
                         elif value == 3:
                             op = "Descriptive Statistics: Mode"
                             inpt, result = interactive_mode_stats()
                             print(f"The mode = {result}")
-                            calculation_hist(time,op,inpt,result)
+                            calculation_hist(time, op, inpt, result)
                             break
                         elif value == 4:
                             break
@@ -120,7 +120,7 @@ def interactive_mode():
                             print(
                                 f"Invalid entry try again. Ensure you enter a value in range {min(stats_menu)} to {max(stats_menu)} "
                             )
-                        
+
                     except ValueError:
                         print("Please enter a valid number from the menu.")
 
@@ -130,11 +130,15 @@ def interactive_mode():
                     with open("history.csv") as file:
                         reader = csv.DictReader(file)
                         for row in reader:
-                            history.append(row) # row is already a dictionary!
+                            history.append(row)  # row is already a dictionary!
 
                     print("\n--- Calculation History (Newest First) ---")
-                    for line in sorted(history, key=lambda x: x["Timestamp"], reverse=True):
-                        print(f"{line['Timestamp']} - {line['Operation']} - {line['Input']} : {line['Result']} \n")
+                    for line in sorted(
+                        history, key=lambda x: x["Timestamp"], reverse=True
+                    ):
+                        print(
+                            f"{line['Timestamp']} - {line['Operation']} - {line['Input']} : {line['Result']} \n"
+                        )
                 except FileNotFoundError:
                     print("No history found yet. Start calculating!")
             elif choice == 5:
@@ -201,12 +205,12 @@ def calculate_median(numbers):
 # --- Interactive Wrappers (Bridge between Logic and User) ---
 def interactive_mean():
     data = getFloatList("Enter numbers: ")
-    return data, round(calculate_mean(data),2)
+    return data, round(calculate_mean(data), 2)
 
 
 def interactive_median():
     data = getFloatList("Enter numbers: ")
-    return data, round(calculate_median(data),2)
+    return data, round(calculate_median(data), 2)
 
 
 def interactive_mode_stats():
@@ -214,7 +218,7 @@ def interactive_mode_stats():
     try:
         return data, calculate_mode(data)
     except statistics.StatisticsError:
-        return data ,"No unique mode"
+        return data, "No unique mode"
 
 
 # --- Input Helper Functions ---
