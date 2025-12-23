@@ -25,7 +25,7 @@ def test_cond_Prob():
     assert oc.con_prob(0.4, 0) is None
 
 def test_quadratic_eq():
-    # FIXED: Removed the space after the comma to match your main script
+    # FIXED: Removed the space after the comma to match main script
     assert oc.quadratic_eq(2, 4, -3) == "x1 = 0.58, x2 = -2.58"
     assert oc.quadratic_eq(2, 4, 2) == "x = -1.00"
     assert oc.quadratic_eq(1, 2, 5) == "There are no real roots"
