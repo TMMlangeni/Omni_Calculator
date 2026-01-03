@@ -1,16 +1,6 @@
 Timestamp,Operation,Input,Result
-
-2025-12-23 16:10,Quadratic Equation,2.0x^2 + 5.0x + 2.0 ,"x1 = -0.50, x2 = -2.00"
-
-2025-12-23 16:10,Quadratic Equation,2.0x^2 + 4.0x + 2.0 ,x = -1.00
-
-2025-12-23 16:11,Conditional Probability,0.4/0.3,1.33
-
-2025-12-23 16:16,Descriptive Statistics: Mean,"[8.0, 5.0, 4.0, 7.0, 6.0, 3.0, 4.0, 5.0, 7.0, 4.0, 6.0, 5.0, 5.0]",5.31
-
-2025-12-23 16:16,Descriptive Statistics: Median,"[3.0, 7.0, 6.0, 5.0, 8.0, 9.0, 7.0, 4.0]",6.5
-
-2025-12-23 16:16,Descriptive Statistics: Median,"[8.0, 9.0, 7.0, 3.0, 6.0, 4.0, 5.0, 1.0, 0.0, 3.0, 2.0]",4.0
-
-2025-12-23 16:17,Descriptive Statistics: Mode,"[5.0, 3.0, 2.0, 47.0, 89.0, 5.0, 7.0, 5.0, 5.0]",5.0
-
+2026-01-03 16:43,Quadratic Equation,"a=1.0, b=2.0, c=-1.0","x1 = 0.41, x2 = -2.41"
+2026-01-03 16:44,Conditional Probability,0.3/0.5,0.6
+2026-01-03 16:44,Descriptive Statistics: Mean,"1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0",4.0
+2026-01-03 16:44,Descriptive Statistics: Median,"2.0, 4.0, 6.0, 8.0, 10.0, 12.0, -2.0, -4.0, -2.0",4.0
+2026-01-03 16:45,Descriptive Statistics: Mode,"-2.0, 5.0, -6.0, -2.0, 8.0, 9.0, 10.0, 3.0",-2.0
