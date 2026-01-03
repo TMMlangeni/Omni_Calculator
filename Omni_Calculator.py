@@ -3,6 +3,8 @@ import statistics
 import sys
 import csv
 from datetime import datetime
+import re
+import os
 
 
 def main():
@@ -46,7 +48,8 @@ def interactive_mode():
         2: "Calculate conditional probability",
         3: "Descriptive statistics",
         4: "View Calculation History",
-        5: "Exit",
+        5: "Clear Calculation History",
+        6: "Exit",
     }
 
     while True:
@@ -63,9 +66,9 @@ def interactive_mode():
                 b = getFloat("Enter the value of b: ")
                 c = getFloat("Enter the value of c: ")
                 print(quadratic_eq(a, b, c))
-                inpt = f"{a}x^2 + {b}x + {c} "
+                data = f"a={a}, b={b}, c={c}"
                 result = quadratic_eq(a, b, c)
-                calculation_hist(time, op, inpt, result)
+                calculation_hist(time, op, data, result)
             elif choice == 2:
                 # Loop for probability inputs to ensure they are valid (0-1)
                 time = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -78,9 +81,9 @@ def interactive_mode():
                             print(
                                 f"The probablility of A given B = {con_prob(x, y):.2f}"
                             )
-                            inpt = f"{x}/{y}"
+                            data = f"{x}/{y}"
                             result = round(con_prob(x, y), 2)
-                            calculation_hist(time, op, inpt, result)
+                            calculation_hist(time, op, data, result)
                             break
                         else:
                             print("Invalid entry: P(B) cannot be 0 or negative.")
@@ -98,21 +101,42 @@ def interactive_mode():
                         value = int(input("What would you like to calculate: "))
                         if value == 1:
                             op = "Descriptive Statistics: Mean"
-                            inpt, result = interactive_mean()
+                            data, result = interactive_mean()
                             print(f"The mean = {result:.2f}")
-                            calculation_hist(time, op, inpt, round(result), 2)
+                            # 2. BUG FIX: Convert the list [1.0, 2.0] into a string "1.0, 2.0"
+                            # This makes the CSV much cleaner
+                            temp_list =[]
+                            for num in data:
+                                string_num = str(num) # turning numbers in the data into a string
+                                temp_list.append(string_num)
+                            clean_input = ", ".join(temp_list)
+                            # 3. BUG FIX: Call the function with exactly 4 arguments 
+                            # (Removed the 'round(result), 2' mistake)
+                            calculation_hist(time, op, clean_input, result)
                             break
                         elif value == 2:
                             op = "Descriptive Statistics: Median"
-                            inpt, result = interactive_median()
+                            data, result = interactive_median()
                             print(f"The Median = {result:.2f}")
-                            calculation_hist(time, op, inpt, result)
+                            temp_list = []
+                            for num in data:
+                                string_num = str(num)
+                                temp_list.append(string_num)
+
+                            clean_input = ", ".join(temp_list)                          
+                            calculation_hist(time, op, clean_input, result)
                             break
                         elif value == 3:
                             op = "Descriptive Statistics: Mode"
-                            inpt, result = interactive_mode_stats()
+                            data, result = interactive_mode_stats()
                             print(f"The mode = {result}")
-                            calculation_hist(time, op, inpt, result)
+                            temp_list = []
+                            for num in data:
+                                string_num = str(num)
+                                temp_list.append(string_num)
+
+                            clean_input = ", ".join(temp_list)                              
+                            calculation_hist(time, op, clean_input, result)
                             break
                         elif value == 4:
                             break
@@ -142,6 +166,17 @@ def interactive_mode():
                 except FileNotFoundError:
                     print("No history found yet. Start calculating!")
             elif choice == 5:
+                confirm = input("Delete history file? (y/n): ").lower()
+                if confirm.lower() == 'y':
+                    if os.path.exists("history.csv"):
+                        os.remove("history.csv")
+                        print("History file deleted.")
+                    else:
+                        print("No history file found to delete.")
+                else:
+                    print("Action cancelled.")
+
+            elif choice == 6:
                 print("Goodbye thanks for using the Omni-Calculator")
                 break
             else:
@@ -153,15 +188,24 @@ def interactive_mode():
 
 
 # function to print history on history.csv file
-def calculation_hist(time, op, inpt, result):
-    with open("history.csv", "a") as file:
-        writer = csv.DictWriter(
-            file, fieldnames=["Timestamp", "Operation", "Input", "Result"]
-        )
-        writer.writerow(
-            {"Timestamp": time, "Operation": op, "Input": inpt, "Result": result}
-        )
-
+def calculation_hist(time, op, data, result):
+    # Check if the file exists before we open it
+    file_exists = os.path.isfile("history.csv")
+    
+    with open("history.csv", "a", newline="") as file:
+        fieldnames = ["Timestamp", "Operation", "Input", "Result"]
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        
+        # BUG FIX: If the file is new, write the header first
+        if not file_exists:
+            writer.writeheader()
+            
+        writer.writerow({
+            "Timestamp": time, 
+            "Operation": op, 
+            "Input": data, 
+            "Result": result
+        })
 
 # --- Logic Functions (Pure Functions for easy Testing) ---
 def quadratic_eq(a, b, c):
@@ -235,8 +279,9 @@ def getFloatList(prompt):
     # Turns a space-separated string into a list of floats.
     while True:
         try:
-            data = input(prompt).split()
-            numbers = [float(i) for i in data]
+            raw_input = input(prompt).strip()
+            data = re.split(r"[,\s;]+", raw_input)
+            numbers = [float(num) for num in data if num]
             if not numbers:
                 print("Error: List cannot be empty.")
                 continue
