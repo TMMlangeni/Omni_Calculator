@@ -1,12 +1,12 @@
 import math
 import statistics
 import sys
-import csv
 from datetime import datetime
 import re
 import os
-
-
+from Calculation import Calculation
+from OmniClass import OmniCalculator
+      
 def main():
     # Checks if user provided command line arguments or wants the menu.
     if len(sys.argv) > 1:
@@ -40,7 +40,6 @@ def cli_mode():
     except ValueError:
         print("Error: CLI arguments must be numbers")
 
-
 def interactive_mode():
     # The main menu for the user interface.
     menu_options = {
@@ -51,16 +50,16 @@ def interactive_mode():
         5: "Clear Calculation History",
         6: "Exit",
     }
-
+    calc_manager = OmniCalculator()
     while True:
-        print("\n-----The Omni-Calculator version(1.6)-----\n")
+        print("\n-----The Omni-Calculator version(1.8)-----\n")
         for key, value in menu_options.items():
             print(f"{key}. {value}")
 
         try:
             choice = int(input("Enter your choice: "))
             if choice == 1:
-                op = "Quadratic Equation"
+                operation = "Quadratic Equation"
                 time = datetime.now().strftime("%Y-%m-%d %H:%M")
                 a = getFloat("Enter the value of a: ")
                 b = getFloat("Enter the value of b: ")
@@ -68,11 +67,13 @@ def interactive_mode():
                 print(quadratic_eq(a, b, c))
                 data = f"a={a}, b={b}, c={c}"
                 result = quadratic_eq(a, b, c)
-                calculation_hist(time, op, data, result)
+                current_calc = Calculation(time,operation, data,result)
+                calc_manager.log_to_csv(current_calc)
+
             elif choice == 2:
                 # Loop for probability inputs to ensure they are valid (0-1)
                 time = datetime.now().strftime("%Y-%m-%d %H:%M")
-                op = "Conditional Probability"
+                operation = "Conditional Probability"
                 while True:
                     x = getFloat("Enter the probability of A and B: ")
                     if 0 <= x <= 1:
@@ -83,7 +84,8 @@ def interactive_mode():
                             )
                             data = f"{x}/{y}"
                             result = round(con_prob(x, y), 2)
-                            calculation_hist(time, op, data, result)
+                            current_calc = Calculation(time,operation, data,result)
+                            calc_manager.log_to_csv(current_calc)
                             break
                         else:
                             print("Invalid entry: P(B) cannot be 0 or negative.")
@@ -100,7 +102,7 @@ def interactive_mode():
                     try:
                         value = int(input("What would you like to calculate: "))
                         if value == 1:
-                            op = "Descriptive Statistics: Mean"
+                            operation = "Descriptive Statistics: Mean"
                             data, result = interactive_mean()
                             print(f"The mean = {result:.2f}")
                             # 2. BUG FIX: Convert the list [1.0, 2.0] into a string "1.0, 2.0"
@@ -111,11 +113,12 @@ def interactive_mode():
                                 temp_list.append(string_num)
                             clean_input = ", ".join(temp_list)
                             # 3. BUG FIX: Call the function with exactly 4 arguments 
-                            # (Removed the 'round(result), 2' mistake)
-                            calculation_hist(time, op, clean_input, result)
+                            current_calc = Calculation(time, operation, clean_input,result)
+                            print(current_calc)
+                            calc_manager.log_to_csv(current_calc)
                             break
                         elif value == 2:
-                            op = "Descriptive Statistics: Median"
+                            operation = "Descriptive Statistics: Median"
                             data, result = interactive_median()
                             print(f"The Median = {result:.2f}")
                             temp_list = []
@@ -124,10 +127,12 @@ def interactive_mode():
                                 temp_list.append(string_num)
 
                             clean_input = ", ".join(temp_list)                          
-                            calculation_hist(time, op, clean_input, result)
+                            current_calc = Calculation(time, operation, clean_input,result)
+                            print(current_calc)
+                            calc_manager.log_to_csv(current_calc)
                             break
                         elif value == 3:
-                            op = "Descriptive Statistics: Mode"
+                            operation = "Descriptive Statistics: Mode"
                             data, result = interactive_mode_stats()
                             print(f"The mode = {result}")
                             temp_list = []
@@ -135,8 +140,10 @@ def interactive_mode():
                                 string_num = str(num)
                                 temp_list.append(string_num)
 
-                            clean_input = ", ".join(temp_list)                              
-                            calculation_hist(time, op, clean_input, result)
+                            clean_input = ", ".join(temp_list)                           
+                            current_calc = Calculation(time, operation, clean_input,result)
+                            print(current_calc)
+                            calc_manager.log_to_csv(current_calc)
                             break
                         elif value == 4:
                             break
@@ -149,63 +156,20 @@ def interactive_mode():
                         print("Please enter a valid number from the menu.")
 
             elif choice == 4:
-                history = []
-                try:
-                    with open("history.csv") as file:
-                        reader = csv.DictReader(file)
-                        for row in reader:
-                            history.append(row)  # row is already a dictionary!
-
-                    print("\n--- Calculation History (Newest First) ---")
-                    for line in sorted(
-                        history, key=lambda x: x["Timestamp"], reverse=True
-                    ):
-                        print(
-                            f"{line['Timestamp']} - {line['Operation']} - {line['Input']} : {line['Result']} \n"
-                        )
-                except FileNotFoundError:
-                    print("No history found yet. Start calculating!")
+                calc_manager.view_history()
             elif choice == 5:
                 confirm = input("Delete history file? (y/n): ").lower()
                 if confirm.lower() == 'y':
-                    if os.path.exists("history.csv"):
-                        os.remove("history.csv")
-                        print("History file deleted.")
-                    else:
-                        print("No history file found to delete.")
+                    calc_manager.clear_history()
                 else:
                     print("Action cancelled.")
-
             elif choice == 6:
                 print("Goodbye thanks for using the Omni-Calculator")
                 break
             else:
-                print(
-                    f"Invalid entry try again. Ensure you enter a value in the range {min(menu_options)} to {max(menu_options)} "
-                )
+                print(f"Invalid entry try again. Ensure you enter a value in the range {min(menu_options)} to {max(menu_options)} ")
         except ValueError:
             print("Invalid entry. Please enter a number from the menu.")
-
-
-# function to print history on history.csv file
-def calculation_hist(time, op, data, result):
-    # Check if the file exists before we open it
-    file_exists = os.path.isfile("history.csv")
-    
-    with open("history.csv", "a", newline="") as file:
-        fieldnames = ["Timestamp", "Operation", "Input", "Result"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        
-        # BUG FIX: If the file is new, write the header first
-        if not file_exists:
-            writer.writeheader()
-            
-        writer.writerow({
-            "Timestamp": time, 
-            "Operation": op, 
-            "Input": data, 
-            "Result": result
-        })
 
 # --- Logic Functions (Pure Functions for easy Testing) ---
 def quadratic_eq(a, b, c):
@@ -222,7 +186,6 @@ def quadratic_eq(a, b, c):
     else:
         return "There are no real roots"
 
-
 def con_prob(x, y):
     # Calculates P(A|B). Returns None if P(B) is 0.
     try:
@@ -230,32 +193,26 @@ def con_prob(x, y):
     except ZeroDivisionError:
         return None
 
-
 def calculate_mean(numbers):
     # Simple wrapper for statistics.mean.
     return statistics.mean(numbers)
-
 
 def calculate_mode(numbers):
     # Simple wrapper for statistics.mode.
     return statistics.mode(numbers)
 
-
 def calculate_median(numbers):
     # Simple wrapper for statistics.median.
     return statistics.median(numbers)
-
 
 # --- Interactive Wrappers (Bridge between Logic and User) ---
 def interactive_mean():
     data = getFloatList("Enter numbers: ")
     return data, round(calculate_mean(data), 2)
 
-
 def interactive_median():
     data = getFloatList("Enter numbers: ")
     return data, round(calculate_median(data), 2)
-
 
 def interactive_mode_stats():
     data = getFloatList("Enter numbers: ")
@@ -263,7 +220,6 @@ def interactive_mode_stats():
         return data, calculate_mode(data)
     except statistics.StatisticsError:
         return data, "No unique mode"
-
 
 # --- Input Helper Functions ---
 def getFloat(prompt):
@@ -273,7 +229,6 @@ def getFloat(prompt):
             return float(input(prompt))
         except ValueError:
             print("Invalid input. Please enter a numerical value.")
-
 
 def getFloatList(prompt):
     # Turns a space-separated string into a list of floats.
