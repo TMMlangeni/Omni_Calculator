@@ -3,10 +3,11 @@ import statistics
 import sys
 from datetime import datetime
 import re
-import os
-from Calculation import Calculation
-from OmniClass import OmniCalculator
-      
+from Calculation_model import Calculation
+from History_Class import OmniCalculator
+from StatsDataset import OmniStatsClass
+
+
 def main():
     # Checks if user provided command line arguments or wants the menu.
     if len(sys.argv) > 1:
@@ -40,6 +41,7 @@ def cli_mode():
     except ValueError:
         print("Error: CLI arguments must be numbers")
 
+
 def interactive_mode():
     # The main menu for the user interface.
     menu_options = {
@@ -51,8 +53,9 @@ def interactive_mode():
         6: "Exit",
     }
     calc_manager = OmniCalculator()
+    
     while True:
-        print("\n-----The Omni-Calculator version(1.8)-----\n")
+        print("\n-----The Omni-Calculator version(2.0)-----\n")
         for key, value in menu_options.items():
             print(f"{key}. {value}")
 
@@ -67,7 +70,7 @@ def interactive_mode():
                 print(quadratic_eq(a, b, c))
                 data = f"a={a}, b={b}, c={c}"
                 result = quadratic_eq(a, b, c)
-                current_calc = Calculation(time,operation, data,result)
+                current_calc = Calculation(time, operation, data, result)
                 calc_manager.log_to_csv(current_calc)
 
             elif choice == 2:
@@ -84,7 +87,7 @@ def interactive_mode():
                             )
                             data = f"{x}/{y}"
                             result = round(con_prob(x, y), 2)
-                            current_calc = Calculation(time,operation, data,result)
+                            current_calc = Calculation(time, operation, data, result)
                             calc_manager.log_to_csv(current_calc)
                             break
                         else:
@@ -93,60 +96,63 @@ def interactive_mode():
                         print("Invalid entry: Probabilities must be between 0 and 1.")
             elif choice == 3:
                 # Sub-menu for Stats
-                stats_menu = {1: "Mean", 2: "Median", 3: "Mode", 4: "Exit"}
+                raw_data = getFloatList("Enter Numbers: ")
+               
+                stats_menu = {
+                    1: "Mean",
+                    2: "Median",
+                    3: "Mode",
+                    4: "Standard Deviation",
+                    5: "Variance",
+                    6: "Update/Change Dataset",
+                    7: "Back to Main Menu",
+                }
+                stats_obj = OmniStatsClass(raw_data)
                 while True:
-                    time = datetime.now().strftime("%Y-%m-%d %H:%M")
+                    print("\n-------Statistics Sub-Menu-------\nPlease Enter your menu choice\n")
                     for key, val in stats_menu.items():
                         print(f"{key}. {val}")
 
                     try:
-                        value = int(input("What would you like to calculate: "))
-                        if value == 1:
+                        sub_choice = int(input("What would you like to calculate: "))
+                        if sub_choice == 1:
                             operation = "Descriptive Statistics: Mean"
-                            data, result = interactive_mean()
-                            print(f"The mean = {result:.2f}")
-                            # 2. BUG FIX: Convert the list [1.0, 2.0] into a string "1.0, 2.0"
-                            # This makes the CSV much cleaner
-                            temp_list =[]
-                            for num in data:
-                                string_num = str(num) # turning numbers in the data into a string
-                                temp_list.append(string_num)
-                            clean_input = ", ".join(temp_list)
-                            # 3. BUG FIX: Call the function with exactly 4 arguments 
-                            current_calc = Calculation(time, operation, clean_input,result)
-                            print(current_calc)
-                            calc_manager.log_to_csv(current_calc)
-                            break
-                        elif value == 2:
+                            result = round(stats_obj.get_mean(),2)
+                            print(f"The Mean = {result}")
+                            calc_manager.log_stats(stats_obj.data,operation,result)
+                            
+                        elif sub_choice == 2:
                             operation = "Descriptive Statistics: Median"
-                            data, result = interactive_median()
-                            print(f"The Median = {result:.2f}")
-                            temp_list = []
-                            for num in data:
-                                string_num = str(num)
-                                temp_list.append(string_num)
-
-                            clean_input = ", ".join(temp_list)                          
-                            current_calc = Calculation(time, operation, clean_input,result)
-                            print(current_calc)
-                            calc_manager.log_to_csv(current_calc)
-                            break
-                        elif value == 3:
+                            result = round(stats_obj.get_median(),2)
+                            print(f"The Median = {result}")
+                            calc_manager.log_stats(stats_obj.data,operation,result)
+                            
+                        elif sub_choice == 3:
                             operation = "Descriptive Statistics: Mode"
-                            data, result = interactive_mode_stats()
+                            result = round(stats_obj.get_mode(),2)
                             print(f"The mode = {result}")
-                            temp_list = []
-                            for num in data:
-                                string_num = str(num)
-                                temp_list.append(string_num)
-
-                            clean_input = ", ".join(temp_list)                           
-                            current_calc = Calculation(time, operation, clean_input,result)
-                            print(current_calc)
-                            calc_manager.log_to_csv(current_calc)
-                            break
-                        elif value == 4:
-                            break
+                            calc_manager.log_stats(stats_obj.data,operation,result)
+                            
+                        elif sub_choice == 4:
+                            operation = "Descriptive Statistics: Standard Deviation"
+                            result = round(stats_obj.get_std(),2)
+                            print (f"Standard dev = {result}")
+                            calc_manager.log_stats(stats_obj.data,operation,result)
+                            
+                        elif sub_choice == 5:
+                            operation = "Descriptive Statistics: Variance"
+                            result = round(stats_obj.get_var(),2)
+                            print(f"Variance = {result}")
+                            calc_manager.log_stats(stats_obj.data,operation,result)
+                        elif sub_choice == 6:
+                            new_data = getFloatList("Enter new data: ")
+                            stats_obj.update_data(new_data)
+                        elif sub_choice == 7:
+                            confirm = input("Are you sure you want to exit? You will lose the data you've already input (y/n): ")
+                            if confirm.lower() == 'y':
+                                break
+                            else:
+                                continue
                         else:
                             print(
                                 f"Invalid entry try again. Ensure you enter a value in range {min(stats_menu)} to {max(stats_menu)} "
@@ -159,7 +165,7 @@ def interactive_mode():
                 calc_manager.view_history()
             elif choice == 5:
                 confirm = input("Delete history file? (y/n): ").lower()
-                if confirm.lower() == 'y':
+                if confirm.lower() == "y":
                     calc_manager.clear_history()
                 else:
                     print("Action cancelled.")
@@ -167,9 +173,12 @@ def interactive_mode():
                 print("Goodbye thanks for using the Omni-Calculator")
                 break
             else:
-                print(f"Invalid entry try again. Ensure you enter a value in the range {min(menu_options)} to {max(menu_options)} ")
+                print(
+                    f"Invalid entry try again. Ensure you enter a value in the range {min(menu_options)} to {max(menu_options)} "
+                )
         except ValueError:
             print("Invalid entry. Please enter a number from the menu.")
+
 
 # --- Logic Functions (Pure Functions for easy Testing) ---
 def quadratic_eq(a, b, c):
@@ -186,6 +195,7 @@ def quadratic_eq(a, b, c):
     else:
         return "There are no real roots"
 
+
 def con_prob(x, y):
     # Calculates P(A|B). Returns None if P(B) is 0.
     try:
@@ -193,33 +203,21 @@ def con_prob(x, y):
     except ZeroDivisionError:
         return None
 
+
 def calculate_mean(numbers):
     # Simple wrapper for statistics.mean.
     return statistics.mean(numbers)
+
 
 def calculate_mode(numbers):
     # Simple wrapper for statistics.mode.
     return statistics.mode(numbers)
 
+
 def calculate_median(numbers):
     # Simple wrapper for statistics.median.
     return statistics.median(numbers)
 
-# --- Interactive Wrappers (Bridge between Logic and User) ---
-def interactive_mean():
-    data = getFloatList("Enter numbers: ")
-    return data, round(calculate_mean(data), 2)
-
-def interactive_median():
-    data = getFloatList("Enter numbers: ")
-    return data, round(calculate_median(data), 2)
-
-def interactive_mode_stats():
-    data = getFloatList("Enter numbers: ")
-    try:
-        return data, calculate_mode(data)
-    except statistics.StatisticsError:
-        return data, "No unique mode"
 
 # --- Input Helper Functions ---
 def getFloat(prompt):
@@ -229,6 +227,7 @@ def getFloat(prompt):
             return float(input(prompt))
         except ValueError:
             print("Invalid input. Please enter a numerical value.")
+
 
 def getFloatList(prompt):
     # Turns a space-separated string into a list of floats.

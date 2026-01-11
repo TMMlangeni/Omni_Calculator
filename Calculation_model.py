@@ -5,5 +5,4 @@ class Calculation:
         self.input_data = input_data
         self.result = result
 
-    def __str__(self):
-        return f"Result: {self.result}"
+    

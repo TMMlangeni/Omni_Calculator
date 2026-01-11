@@ -1,5 +1,7 @@
 import csv
 import os
+from Calculation_model import Calculation
+from datetime import datetime
 
 class OmniCalculator:
     def __init__(self):
@@ -17,6 +19,7 @@ class OmniCalculator:
                             "Input": calc_obj.input_data,
                             "Result": calc_obj.result,
                             })
+
     def view_history(self):
         history = []
         try:
@@ -38,7 +41,28 @@ class OmniCalculator:
     def clear_history(self):
         if os.path.exists(self.history_file):
             os.remove(self.history_file)
-            print("History file deleted.")
+            print("History cleared successfully")
         else:
-            print("No history file found to delete.")
-       
+            print("History file already cleared.")
+    
+    # --- HERE IS THE CORRECTED FUNCTION ---
+    def log_stats(self, data_array, operation, result):
+        # REMOVED: calc_manager = Calculation() -> This would crash because it needs arguments.
+        
+        temp_list = []
+        
+        # BUG FIX: Changed 'self.data' to 'data_array'
+        # 'self.data' belongs to the Stats class, not this Calculator class.
+        # We use 'data_array' because that is the name of the argument you passed in.
+        for num in data_array:
+            string_num = str(num)
+            temp_list.append(string_num)
+
+        cleaned_input = ", ".join(temp_list)
+        time = datetime.now().strftime("%Y-%m-%d %H:%M")
+        
+        # Create the object with the 4 required arguments
+        current_calc = Calculation(time, operation, cleaned_input, result)
+        
+        
+        self.log_to_csv(current_calc)
