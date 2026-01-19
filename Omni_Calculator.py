@@ -36,8 +36,12 @@ def cli_mode():
                 print(f"Mode: {calculate_mode(numbers)}")
             except statistics.StatisticsError:
                 print("No unique Mode found")
+        elif command == "-stdev":
+            print(f"Standard deviation: {calculate_std(numbers)}")
+        elif command == "-variance":
+            print(f"Variance: {calculate_var(numbers)}")
         else:
-            print("Unknown command. Try '-mean', '-median' or '-mode'")
+            print("Unknown command. Try '-mean', '-median', '-mode', '-stdev', '-variance' ")
     except ValueError:
         print("Error: CLI arguments must be numbers")
 
@@ -53,9 +57,9 @@ def interactive_mode():
         6: "Exit",
     }
     calc_manager = OmniCalculator()
-    
+    print("\n-----The Omni-Calculator version(2.0)-----\n")
     while True:
-        print("\n-----The Omni-Calculator version(2.0)-----\n")
+        
         for key, value in menu_options.items():
             print(f"{key}. {value}")
 
@@ -67,7 +71,7 @@ def interactive_mode():
                 a = getFloat("Enter the value of a: ")
                 b = getFloat("Enter the value of b: ")
                 c = getFloat("Enter the value of c: ")
-                print(quadratic_eq(a, b, c))
+                print(f"\n{quadratic_eq(a, b, c)}\n")
                 data = f"a={a}, b={b}, c={c}"
                 result = quadratic_eq(a, b, c)
                 current_calc = Calculation(time, operation, data, result)
@@ -83,7 +87,7 @@ def interactive_mode():
                         y = getFloat("Enter the probability of B: ")
                         if 0 < y <= 1:
                             print(
-                                f"The probablility of A given B = {con_prob(x, y):.2f}"
+                                f"\nThe probablility of A given B = {con_prob(x, y):.2f}\n"
                             )
                             data = f"{x}/{y}"
                             result = round(con_prob(x, y), 2)
@@ -96,7 +100,8 @@ def interactive_mode():
                         print("Invalid entry: Probabilities must be between 0 and 1.")
             elif choice == 3:
                 # Sub-menu for Stats
-                raw_data = getFloatList("Enter Numbers: ")
+                print("\n-------Statistics Sub-Menu-------\n")
+                raw_data = getFloatList("Enter data: ")
                
                 stats_menu = {
                     1: "Mean",
@@ -109,40 +114,40 @@ def interactive_mode():
                 }
                 stats_obj = OmniStatsClass(raw_data)
                 while True:
-                    print("\n-------Statistics Sub-Menu-------\nPlease Enter your menu choice\n")
+                    
                     for key, val in stats_menu.items():
                         print(f"{key}. {val}")
-
+                    print("Please Enter your menu choice\n")
                     try:
                         sub_choice = int(input("What would you like to calculate: "))
                         if sub_choice == 1:
                             operation = "Descriptive Statistics: Mean"
                             result = round(stats_obj.get_mean(),2)
-                            print(f"The Mean = {result}")
+                            print(f"\nThe Mean = {result}\n")
                             calc_manager.log_stats(stats_obj.data,operation,result)
                             
                         elif sub_choice == 2:
                             operation = "Descriptive Statistics: Median"
                             result = round(stats_obj.get_median(),2)
-                            print(f"The Median = {result}")
+                            print(f"\nThe Median = {result}\n")
                             calc_manager.log_stats(stats_obj.data,operation,result)
                             
                         elif sub_choice == 3:
                             operation = "Descriptive Statistics: Mode"
                             result = round(stats_obj.get_mode(),2)
-                            print(f"The mode = {result}")
+                            print(f"\nThe mode = {result}\n")
                             calc_manager.log_stats(stats_obj.data,operation,result)
                             
                         elif sub_choice == 4:
                             operation = "Descriptive Statistics: Standard Deviation"
                             result = round(stats_obj.get_std(),2)
-                            print (f"Standard dev = {result}")
+                            print (f"\nStandard dev = {result}\n")
                             calc_manager.log_stats(stats_obj.data,operation,result)
                             
                         elif sub_choice == 5:
                             operation = "Descriptive Statistics: Variance"
                             result = round(stats_obj.get_var(),2)
-                            print(f"Variance = {result}")
+                            print(f"\nVariance = {result}\n")
                             calc_manager.log_stats(stats_obj.data,operation,result)
                         elif sub_choice == 6:
                             new_data = getFloatList("Enter new data: ")
@@ -211,14 +216,22 @@ def calculate_mean(numbers):
 
 def calculate_mode(numbers):
     # Simple wrapper for statistics.mode.
+    
     return statistics.mode(numbers)
+    
+
 
 
 def calculate_median(numbers):
     # Simple wrapper for statistics.median.
     return statistics.median(numbers)
 
+def calculate_std(numbers):
+    # Simple wrapper for standard deviation
+    return statistics.stdev(numbers)
+def calculate_var(numbers):
 
+    return statistics.variance(numbers)
 # --- Input Helper Functions ---
 def getFloat(prompt):
     # Forces user to enter a valid float.

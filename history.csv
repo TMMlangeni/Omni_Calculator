@@ -13,3 +13,15 @@ Timestamp,Operation,Input,Result
 2026-01-11 21:24,Descriptive Statistics: Mode,"1.0, 7.0, 8.0, 9.0, 4.0, 5.0, 7.0, 3.0, 6.0, 1.0, 2.0, 5.0, 4.0, 3.0, 6.0, 4.0, 7.0, 5.0, 8.0, 9.0, 2.0, 7.0",7.0
 2026-01-11 21:24,Descriptive Statistics: Standard Deviation,"1.0, 7.0, 8.0, 9.0, 4.0, 5.0, 7.0, 3.0, 6.0, 1.0, 2.0, 5.0, 4.0, 3.0, 6.0, 4.0, 7.0, 5.0, 8.0, 9.0, 2.0, 7.0",2.42
 2026-01-11 21:24,Descriptive Statistics: Variance,"1.0, 7.0, 8.0, 9.0, 4.0, 5.0, 7.0, 3.0, 6.0, 1.0, 2.0, 5.0, 4.0, 3.0, 6.0, 4.0, 7.0, 5.0, 8.0, 9.0, 2.0, 7.0",5.85
+2026-01-19 15:10,Quadratic Equation,"a=5.0, b=7.0, c=12.0",There are no real roots
+2026-01-19 15:11,Quadratic Equation,"a=5.0, b=7.0, c=-12.0","x1 = 1.00, x2 = -2.40"
+2026-01-19 15:12,Conditional Probability,0.5/0.23,2.17
+2026-01-19 15:16,Descriptive Statistics: Standard Deviation,"25.0, 19.0, 26.0, 35.0, 45.0, 6.0",12.19
+2026-01-19 23:55,Descriptive Statistics: Mode,"5.0, 4.0, 3.0, 7.0, 9.0, 4.0, 3.0, 5.0, 1.0, 2.0, 9.0, 9.0, 8.0, 2.0, 0.0",9.0
+2026-01-19 23:56,Descriptive Statistics: Mean,"5.0, 4.0, 3.0, 7.0, 9.0, 4.0, 3.0, 5.0, 1.0, 2.0, 9.0, 9.0, 8.0, 2.0, 0.0",4.73
+2026-01-19 23:56,Descriptive Statistics: Median,"5.0, 4.0, 3.0, 7.0, 9.0, 4.0, 3.0, 5.0, 1.0, 2.0, 9.0, 9.0, 8.0, 2.0, 0.0",4.0
+2026-01-19 23:56,Descriptive Statistics: Standard Deviation,"5.0, 4.0, 3.0, 7.0, 9.0, 4.0, 3.0, 5.0, 1.0, 2.0, 9.0, 9.0, 8.0, 2.0, 0.0",2.93
+2026-01-19 23:56,Descriptive Statistics: Variance,"5.0, 4.0, 3.0, 7.0, 9.0, 4.0, 3.0, 5.0, 1.0, 2.0, 9.0, 9.0, 8.0, 2.0, 0.0",8.6
+2026-01-20 00:00,Quadratic Equation,"a=5.0, b=8.0, c=-2.0","x1 = 0.22, x2 = -1.82"
+2026-01-20 00:02,Conditional Probability,0.4/0.5,0.8
+2026-01-20 00:04,Descriptive Statistics: Standard Deviation,"1.0, 2.0, 3.0, 4.0, 5.0, 6.0",1.71
