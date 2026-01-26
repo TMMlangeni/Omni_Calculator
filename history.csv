@@ -25,3 +25,7 @@ Timestamp,Operation,Input,Result
 2026-01-20 00:00,Quadratic Equation,"a=5.0, b=8.0, c=-2.0","x1 = 0.22, x2 = -1.82"
 2026-01-20 00:02,Conditional Probability,0.4/0.5,0.8
 2026-01-20 00:04,Descriptive Statistics: Standard Deviation,"1.0, 2.0, 3.0, 4.0, 5.0, 6.0",1.71
+2026-01-26 15:47,Descriptive Statistics: Standard Deviation,"5000.5, 1200.0, 4500.75, 300.0, 8900.2, 150.5, 6700.0, 3200.1",3140.02
+2026-01-26 15:47,Descriptive Statistics: Mode,"5000.5, 1200.0, 4500.75, 300.0, 8900.2, 150.5, 6700.0, 3200.1",5000.5
+2026-01-26 15:48,Descriptive Statistics: Median,"5000.5, 1200.0, 4500.75, 300.0, 8900.2, 150.5, 6700.0, 3200.1",3850.42
+2026-01-26 15:49,Descriptive Statistics: Variance,"700.0, 650.0, 600.0, 720.0, 580.0, 800.0, 550.0, 620.0, 750.0, 680.0",6316.67

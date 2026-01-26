@@ -37,4 +37,4 @@ A professional-grade, terminal-based CLI tool designed for complex mathematical 
 **Talani Malwandla Mlangeni**
 * **LinkedIn:** www.linkedin.com/in/talani-mlangeni-20a0201ab
 * **University:** North West University
-* **Qualification:** Bachelor of Science in Mathematics and Computer Science
+* **Qualification:** Bachelor of Science in Mathematical Science and Computer Science
